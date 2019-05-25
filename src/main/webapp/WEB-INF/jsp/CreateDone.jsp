@@ -4,6 +4,7 @@
 <html>
 <head>
 <title>Account Created</title>
+<link rel="shortcut icon" href="http://www.iconarchive.com/download/i99695/sonya/swarm/Fast-Food.ico">
 </head>
 <body>
 

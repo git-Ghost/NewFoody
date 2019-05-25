@@ -1,9 +1,28 @@
 package com.aws.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class Users {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "cid")
 	private int cid;
+	
+	@Column(name = "cname")
 	private String cname;
+	
+	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "password")
 	private String password;
 
 	public int getCid() {
@@ -43,6 +62,6 @@ public class Users {
 	 */
 	@Override
 	public String toString() {
-		return ("User Details as --->\nCName = "+cname+"\nEmail = "+email+"\nPassword = "+password);
+		return ("CName = "+cname+"\nEmail = "+email);
 	}
 }

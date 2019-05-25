@@ -7,6 +7,7 @@
 <meta charset="ISO-8859-1">
  <title>Register</title>
    <link rel="stylesheet" href="stylesheet.css" type="text/css" /> 
+   <link rel="shortcut icon" href="http://www.iconarchive.com/download/i99695/sonya/swarm/Fast-Food.ico">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">

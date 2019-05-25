@@ -9,31 +9,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
+import com.aws.dao.UsersDAO;
 import com.aws.domain.Users;
 
 @WebServlet({ "/Success" })
 public class Success extends HttpServlet {
+	
 	private static final long serialVersionUID = -8175337090332985511L;
-	Configuration conf;
-	SessionFactory factory;
-	Session session;
-	Transaction trans;
-	Users userObj;
 	Logger log;
 	
+	/**
+	 * Constructor which will be initiated during server startup
+	 */
 	public Success() {
-		conf = new Configuration();
-		trans = null;
 		log = Logger.getLogger(getClass());
 	}
-
+	
+	/**
+	 * doPost method for registration page
+	 */
 	@Override
-	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
+	protected void doPost( HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		resp.setContentType("text/html");
 		final String cName = req.getParameter("name").trim();
@@ -42,39 +39,18 @@ public class Success extends HttpServlet {
 
 		if (cName == null || password == null || password.equals("") || cName.equals("")) {
 			log.warn("Invalid Entry Made with CName :: " + cName + " and password :: " + password);
+			log.info("Redirecting To CreateFail Page due to Invalid Entry being made...");
 			resp.sendRedirect("./CreateFail");
 		} else {
-			log.info("Initiation of DB Object...");
-			conf = conf.configure("/com/aws/config/hibernate.cfg.xml");
-			factory = conf.buildSessionFactory();
-			session = factory.openSession();
-			userObj = new Users();
-			log.info("** User Object Created **");
-			userObj.setCname(cName);
-			userObj.setEmail(cEmail);
-			userObj.setPassword(password);
-
-			try {
-					log.info(userObj.toString());
-					trans = session.beginTransaction();
-					session.save(userObj);
-					trans.commit();
-					log.info("Record Inserted successfully...");
-					resp.sendRedirect("./CreateDone");
-			} catch (Exception e2) {
-				log.warn("Error Occured while inserting to DB\nCheck For Unique values of EMAIL :: " + cEmail
-						+ "\nRedirection to Registration Page");
-				trans.rollback();
+			Users newUser = new Users();
+			newUser.setCname(cName);
+			newUser.setEmail(cEmail);
+			newUser.setPassword(password);
+			boolean status = new UsersDAO().createUser(newUser);
+			if(status!=false)
+				resp.sendRedirect("./CreateDone");
+			else
 				resp.sendRedirect("./CreateFail");
-			}
 		}
-	}
-
-	@Override
-	public void destroy() {
-		log.warn("Closing DB Connection Now");
-		session.close();
-		factory.close();
-		super.destroy();
 	}
 }

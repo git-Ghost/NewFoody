@@ -5,6 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Login</title>
+<link rel="shortcut icon" href="http://www.iconarchive.com/download/i99695/sonya/swarm/Fast-Food.ico">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
