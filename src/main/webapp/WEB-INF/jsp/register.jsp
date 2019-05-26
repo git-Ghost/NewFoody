@@ -91,11 +91,11 @@
 	    	<div class="card-body">
 	    		<div class="form-group">
 		    		<label for="name">Name</label>
-		    		<input type="text" pattern="[A-Za-z]+" class="form-control" id="name" name="name" required>
+		    		<input type="text" pattern="[A-Za-z\s]+" class="form-control" id="name" name="name" required>
 		  		</div>
 				<div class="form-group">
 		    		<label for="email">Email</label>
-		    		<input type="email" class="form-control" id="email" name="email" required>
+		    		<input maxlength="20" type="email" class="form-control" id="email" name="email" required>
 		  		</div>
 		  		<div class="form-group">
 		    		<label for="password">Password</label>
@@ -111,7 +111,7 @@
 		  		</div>
 				<br>
 				<input type="submit" class="btn btn-danger btn-block" value="Register" disabled="disabled"/>
-				<input type="submit" class="btn btn-danger btn-block" value="Cancel" onclick="window.location='./index';" />
+				<input type="button" class="btn btn-danger btn-block" value="Cancel" onclick="window.location='./index';" />
 			</div>
 		</div>
 		</center>

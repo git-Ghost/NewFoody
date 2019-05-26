@@ -1,5 +1,9 @@
 package com.aws.utility;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,7 +25,7 @@ public class DbUtil {
 	}
 	
 	/**
-	 * This method will return DATASOURCE Object through lookup in JNDI Liberary
+	 * This method will return DATASOURCE Object through lookup in JNDI Library
 	 * @return {@link DataSource} object = on which getConnection() method is called 
 	 * to get a reference object of Connection
 	 */
@@ -35,7 +39,7 @@ public class DbUtil {
 				log.info("+++ Pooling obj found and Returning the same +++");
 			}
 			else
-				new Exception("------> DataSource Not Found <------");
+				log.warn("------> DataSource Not Found <------");
 		} catch (NamingException e) {
 			log.fatal("No JNDI Mapped Config can be found in context.xml with the name ---> "+JNDI_LOOKUP_SERVICE);
 			log.warn(e.getStackTrace());
@@ -54,5 +58,29 @@ public class DbUtil {
 		Configuration config = new Configuration();
 		config = config.configure(CONF_FILE_PATH);
 		return(config.buildSessionFactory());
+	}
+	
+	/**
+	 * This method will check the table presence in the database or not 
+	 * @param tName = table name which need to found out in the DB
+	 * @return boolean true = if table exists else returns false
+	 */
+	public static boolean checkTableInDb(String tName) {
+		boolean flag = false;
+		try {
+			Connection conn = getDataSource().getConnection();
+			ResultSet rs = conn.getMetaData().getCatalogs();
+			while(rs.next()) {
+				String catalogs = rs.getString(1);
+				if(tName.equals(catalogs)){
+					flag=true;
+					break;
+				}
+			}
+			conn.close();
+		} catch (SQLException e) {
+			log.info("SQL Pool Connection Exception :: "+e.getStackTrace());
+		}
+		return flag;
 	}
 }

@@ -17,15 +17,8 @@ import com.aws.domain.Users;
 public class Success extends HttpServlet {
 	
 	private static final long serialVersionUID = -8175337090332985511L;
-	Logger log;
-	
-	/**
-	 * Constructor which will be initiated during server startup
-	 */
-	public Success() {
-		log = Logger.getLogger(getClass());
-	}
-	
+	Logger log = Logger.getLogger(getClass());
+
 	/**
 	 * doPost method for registration page
 	 */
