@@ -1,11 +1,6 @@
 package com.aws.dao;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,21 +11,39 @@ import org.hibernate.Transaction;
 
 import com.aws.domain.Users;
 import com.aws.utility.DbUtil;
-import com.ibatis.common.jdbc.ScriptRunner;
 
-public class UsersDAO {
+public class UsersDAO extends Exception{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Logger log = Logger.getLogger(this.getClass());
 	ReentrantLock threadLock = new ReentrantLock();
-
+	
+	/**
+	 * Zero-Param Constructor to enable to create object
+	 */
+	public UsersDAO() {}
+	
+	/**
+	 * Handling Custom Exception in the Hibernate Object Creation
+	 * @param str = Exception information
+	 */
+	public UsersDAO(String str) {
+		super(str);
+	}
+	
 	/**
 	 * This method will insert new entry to Users table in DB
 	 * 
 	 * @param newUser
 	 *            = Users Object
 	 * @return boolean true = if record insertion is successful otherwise false
+	 * @throws SQLException 
+	 * @throws IOException 
 	 */
-	public boolean createUser(Users newUser) {
+	public boolean createUser(Users newUser) throws IOException, SQLException ,UsersDAO {
 		boolean flag = false, dbCheck;
 		SessionFactory factory = DbUtil.getSessionFactory();
 		Session session = factory.openSession();
@@ -44,8 +57,12 @@ public class UsersDAO {
 			log.info("##### Checking User Table in DB Schema #####");
 			dbCheck = DbUtil.checkTableInDb("Users");
 			if (dbCheck != true) {
-				this.createUseTable();
-				log.info("User Table Created Successfull in the Schema");
+				log.warn("!!! 'USERS' TABLE WASN'T FOUND IN SCHEMA !!!\nCreating Table 'USERS' Now...");
+				boolean tStatus = DbUtil.createTable("/USERS_TABLE_SCRIPT/createTable.sql");
+				if(tStatus == true)
+					log.info("User Table Created Successfull in the Schema");
+				else 
+					throw new UsersDAO("User Table Creation Failed Throwing New Exception ...");
 			}
 			log.info("Opening Session for saving the Users Object Now...");
 			try {
@@ -60,6 +77,7 @@ public class UsersDAO {
 				log.fatal("Exception Encountered while insertion of record\n" + e.getStackTrace() + "\nRecord Info || "
 						+ newUser.toString());
 				trans.rollback();
+				throw new UsersDAO(e.getStackTrace().toString());
 			} finally {
 				log.warn("Terminating Session now...");
 				session.close();
@@ -76,37 +94,5 @@ public class UsersDAO {
 			this.createUser(newUser);
 		}
 		return flag;
-	}
-
-	/**
-	 * This method will create User table in the DB Schema
-	 */
-	private void createUseTable() {
-		final String SQLScriptFilePath = "./src/main/resources/DbScripts/users.sql";
-		Connection con = null;
-		try {
-			con = DbUtil.getDataSource().getConnection();
-			// Initialize object for ScripRunner
-			ScriptRunner sr = new ScriptRunner(con, false, false);
-			log.info("Loading the File || " + SQLScriptFilePath);
-			// Give the input file to Reader
-			Reader reader = new BufferedReader(new FileReader(SQLScriptFilePath));
-			// Execute script
-			sr.runScript(reader);
-			log.info("Executed the Script in the directory --> " + SQLScriptFilePath);
-
-		} catch (SQLException e) {
-			log.warn("Connection Object Creation Exception while creating User Table\n" + e.getStackTrace());
-		} catch (FileNotFoundException e) {
-			log.warn("Script File Can't be Found in specified Path ---> " + SQLScriptFilePath);
-		} catch (IOException e) {
-			log.warn("Error in Executing Script For --> " + SQLScriptFilePath);
-			log.warn(e.getStackTrace());
-		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-			}
-		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.aws.loginCheck;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,11 +40,17 @@ public class Success extends HttpServlet {
 			newUser.setCname(cName);
 			newUser.setEmail(cEmail);
 			newUser.setPassword(password);
-			boolean status = new UsersDAO().createUser(newUser);
-			if(status!=false)
-				resp.sendRedirect("./CreateDone");
-			else
-				resp.sendRedirect("./CreateFail");
+			boolean status;
+			try {
+				status = new UsersDAO().createUser(newUser);
+				if(status!=false)
+					resp.sendRedirect("./CreateDone");
+				else
+					resp.sendRedirect("./CreateFail");
+			} catch (SQLException | UsersDAO e) {
+				log.warn(e);
+				resp.sendRedirect("./error");
+			}
 		}
 	}
 }

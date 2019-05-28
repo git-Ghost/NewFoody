@@ -1,5 +1,11 @@
 package com.aws.utility;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +18,8 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
+import com.ibatis.common.jdbc.ScriptRunner;
 
 
 public class DbUtil {
@@ -80,6 +88,39 @@ public class DbUtil {
 			conn.close();
 		} catch (SQLException e) {
 			log.info("SQL Pool Connection Exception :: "+e.getStackTrace());
+		}
+		return flag;
+	}
+	
+	/**
+	 * This method will create table with DB Schema as awsmysql
+	 * @param sqlFile = Sql File Path From Resource Directory
+	 * 	Ex,
+	 * 		sqlFile = "/USERS_TABLE_SCRIPT/createTable.sql"
+	 * @return true = if table is created successfully
+	 * 			false = if table creatation is failed
+	 * 
+	 */
+	public static boolean createTable(String sqlFile) throws IOException,SQLException {
+		boolean flag = false;
+		InputStream in = MethodHandles.lookup().lookupClass().getResourceAsStream(sqlFile);
+		Connection con = null;
+		try {
+			con = DbUtil.getDataSource().getConnection();
+			// Initialize object for ScripRunner
+			ScriptRunner sr = new ScriptRunner(con, false, false);
+			log.info("Loading the File || "+sqlFile);
+			// Give the input file to Reader
+			Reader reader = new BufferedReader(new InputStreamReader(in));
+			// Execute script
+			sr.runScript(reader);
+			log.info("Executed the Script in the directory --> "+sqlFile);
+			flag=true;
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+			}
 		}
 		return flag;
 	}

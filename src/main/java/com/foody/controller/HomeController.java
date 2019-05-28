@@ -16,4 +16,9 @@ public class HomeController
     public String getErrorPage() { 
     	return "forward:/static/general-error.html";
     }
+   
+   @RequestMapping(value = { "/error" } ,method = {RequestMethod.GET, RequestMethod.POST} ) 
+   public String getErrPage() { 
+   	return "forward:/static/general-error.html";
+   }
 }
