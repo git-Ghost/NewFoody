@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<!-- Connection Properties -->
+		
+		<!-- <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://mysql.c5ob75ee6lde.us-east-2.rds.amazonaws.com:3306/awsmysql</property>
+		<property name="hibernate.connection.username">admin</property>
+		<property name="hibernate.connection.password">adminAWS</property>
+		 -->
+		
+		<property name="hibernate.connection.datasource">java:comp/env/db/awsMysqlDb</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>	
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="current_session_context_class">thread</property>
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+		
+		<!-- Mapping File/class -->
+		<mapping class="com.aws.domain.Users" />
+
+	</session-factory>
+</hibernate-configuration>
