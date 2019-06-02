@@ -131,7 +131,7 @@
 			
 			<div class="container-fluid footer">
 				<div class="container-fluid" id="footer-data">
-					<h5>Powered By @Uber Technologies</h5>
+					<h5>Powered By @Foody Technologies</h5>
 				</div>
 			</div>
 			

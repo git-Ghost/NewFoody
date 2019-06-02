@@ -7,27 +7,67 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet({ "/console" })
+import org.apache.log4j.Logger;
+
+import com.aws.dao.UsersDAO;
+import com.aws.domain.Users;
+import com.aws.utility.DbUtil;
+
+@WebServlet("/console")
 public class ConsoleServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+	UsersDAO userDAO_Obj = UsersDAO.getInstance();
+	// private final String sessionId = UUID.randomUUID().toString();
+	Logger log = Logger.getLogger(this.getClass());
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String emailID = req.getParameter("email");
 		String password = req.getParameter("password");
-	
-	
+		boolean isPresent = DbUtil.checkTableInDb("users");
+		if (isPresent == false) {
+			log.fatal("No Table can be found for this ...Redirecting to Registration !!!");
+			res.sendRedirect("./new");
+		} else {
+			try {
+				Users userInfo = userDAO_Obj.getData(emailID, password);
+				if (userInfo != null) {
+					/*
+					 * log.info("Putting Cookie Id as { " + sessionId +
+					 * " } for the current session"); Cookie userCookie = new Cookie("_id",
+					 * sessionId); res.addCookie(userCookie); req.setAttribute("CName",
+					 * userInfo.getCname());
+					 */
+					HttpSession session = req.getSession();
+					session.setAttribute("email", emailID);
+					session.setAttribute("name", userInfo.getCname());
+					
+					// session.invalidate();
+					// HttpSession session = req.getSession(false);
+					req.getRequestDispatcher("./home").forward(req, res);	
+				} else
+					res.sendRedirect("./loginFailed");
+			} catch (Exception e) {
+				log.fatal(e);
+				res.sendRedirect("./error");
+			}
+		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		res.setContentType("text/html");
-		res.setIntHeader("Refresh", 1);
-		if (req.getParameter("email").trim() != "" && req.getParameter("password") != "") {
+		if (req.getParameter("email").trim() != "" && req.getParameter("password") != "") 
 			this.doGet(req, res);
-		} else
+		else
 			res.sendRedirect("./loginFailed");
+	}
+
+	@Override
+	public void destroy() {
+		userDAO_Obj.tearDown();
+		super.destroy();
 	}
 }

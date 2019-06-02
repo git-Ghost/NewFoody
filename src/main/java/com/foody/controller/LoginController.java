@@ -9,12 +9,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class LoginController
 {
     @RequestMapping(value = { "/login" }, method = {RequestMethod.GET} )
-    public String printHello(final ModelMap model) {
+    public String getLoginPage(final ModelMap model) {
         return "login";
     }
     
     @RequestMapping(value = { "/loginFailed" } ,method = {RequestMethod.GET}) 
     public String getErrorPage() { 
     	return "forward:/static/loginFailed.html";
+    }
+    
+    @RequestMapping(value = { "/new" } ,method = {RequestMethod.GET ,RequestMethod.POST}) 
+    public String getNewPage() { 
+    	return "new";
+    }
+    
+    @RequestMapping(value = { "/home" } ,method = {RequestMethod.POST}) 
+    public String getHomePage() { 
+    	return "home";
     }
 }

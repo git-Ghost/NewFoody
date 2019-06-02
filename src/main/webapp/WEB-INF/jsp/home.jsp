@@ -1,16 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 
 <html>
-	
+
 	<head>
 	
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="shortcut icon" href="http://www.iconarchive.com/download/i99695/sonya/swarm/Fast-Food.ico">
-		<title>Foody</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -53,7 +52,9 @@
 	</head>
 	
 	<body>
-	
+		<% 
+			HttpSession ses = request.getSession(false);
+			if(ses.getAttribute("name")!=null){ %>
 		<div class="container-fluid">
 			<div class="container-fluid" id="navigationbar">
 				<nav class="navbar navbar-expand-sm">
@@ -62,10 +63,10 @@
 					  </a>
 					  <ul class="navbar-nav ml-auto">
 						<li class="nav-item">
-						  <a class="nav-link text-danger" href="./login">Login</a>
+						  <a class="nav-link text-danger" href="./login">Hello</a>
 						</li>
 						<li class="nav-item">
-						  <a class="nav-link text-danger" href="./register">Register</a>
+						  <a class="nav-link text-danger" href="./register">Logout</a>
 						</li>
 					  </ul>
 				</nav>
@@ -132,11 +133,14 @@
 			
 			<div class="container-fluid footer">
 				<div class="container-fluid" id="footer-data">
-					<h5>Powered By @Uber Technologies</h5>
+					<h5>Powered By @Foody Technologies</h5>
 				</div>
 			</div>
 			
 		</div>
 		
+		<% }else
+			response.sendRedirect("./error");
+		%>
 	</body>
 </html>

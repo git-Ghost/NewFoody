@@ -75,12 +75,13 @@ public class DbUtil {
 	 */
 	public static boolean checkTableInDb(String tName) {
 		boolean flag = false;
+		log.info("##### Checking Table in DB Schema ---> "+tName+" #####");
 		try {
 			Connection conn = getDataSource().getConnection();
-			ResultSet rs = conn.getMetaData().getCatalogs();
+			ResultSet rs = conn.getMetaData().getTables(null, null, "%", null);
 			while(rs.next()) {
-				String catalogs = rs.getString(1);
-				if(tName.equals(catalogs)){
+				String catalogs = rs.getString(3);
+				if(tName.equalsIgnoreCase(catalogs)){
 					flag=true;
 					break;
 				}

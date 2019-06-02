@@ -19,7 +19,9 @@ public class Success extends HttpServlet {
 	
 	private static final long serialVersionUID = -8175337090332985511L;
 	Logger log = Logger.getLogger(getClass());
-
+	String errorString = null;
+	UsersDAO userDAO_Obj = UsersDAO.getInstance();
+	
 	/**
 	 * doPost method for registration page
 	 */
@@ -34,23 +36,35 @@ public class Success extends HttpServlet {
 		if (cName == null || password == null || password.equals("") || cName.equals("")) {
 			log.warn("Invalid Entry Made with CName :: " + cName + " and password :: " + password);
 			log.info("Redirecting To CreateFail Page due to Invalid Entry being made...");
+			errorString = "UserName or Password or Name is invalid!";
+			req.setAttribute("errorString", errorString);
 			resp.sendRedirect("./CreateFail");
-		} else {
+		} 
+		  else {
 			Users newUser = new Users();
 			newUser.setCname(cName);
 			newUser.setEmail(cEmail);
 			newUser.setPassword(password);
 			boolean status;
 			try {
-				status = new UsersDAO().createUser(newUser);
+				status = userDAO_Obj.createUser(newUser);
 				if(status!=false)
 					resp.sendRedirect("./CreateDone");
-				else
+				else {
+					errorString = "Entry with the Same Email Exists ..";
+					req.setAttribute("errorString", errorString);
 					resp.sendRedirect("./CreateFail");
+				}
 			} catch (SQLException | UsersDAO e) {
 				log.warn(e);
 				resp.sendRedirect("./error");
 			}
 		}
+	}
+	
+	@Override
+	public void destroy() {
+		userDAO_Obj.tearDown();
+		super.destroy();
 	}
 }

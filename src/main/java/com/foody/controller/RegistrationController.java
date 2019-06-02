@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class RegistrationController
 {
-	@RequestMapping(value = { "/register" }, method = { RequestMethod.GET })
+	@RequestMapping(value = { "/register" }, method = { RequestMethod.GET , RequestMethod.POST })
     public String showRegistrationPage() {
         return "register";
     }
