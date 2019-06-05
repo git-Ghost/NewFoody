@@ -6,7 +6,7 @@
 <html>
 
 	<%
-	HttpSession session = request.getSession(false);
+	HttpSession session = request.getSession();
 	if(session.getAttribute("name")!=null){
 		response.sendRedirect("./home");
 	}else{

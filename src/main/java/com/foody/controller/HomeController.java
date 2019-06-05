@@ -12,9 +12,14 @@ public class HomeController
         return "index";
     }
     
-   @RequestMapping(value = { "/*" } ,method = { RequestMethod.POST, RequestMethod.GET}) 
+   /*@RequestMapping(value = { "/*" } ,method = { RequestMethod.POST, RequestMethod.GET}) 
     public String getErrorPage() { 
     	return "forward:/static/general-error.html";
+    }*/
+    
+    @RequestMapping(value = { "/" } ,method = { RequestMethod.GET}) 
+    public String getWelcomePage() { 
+    	return "index";
     }
    
    @RequestMapping(value = { "/error" } ,method = {RequestMethod.GET, RequestMethod.POST} ) 
