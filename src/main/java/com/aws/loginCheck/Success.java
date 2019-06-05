@@ -54,7 +54,7 @@ public class Success extends HttpServlet {
 					session.setAttribute("email", newUser.getEmail());
 					session.setAttribute("name", newUser.getCname());
 					log.info("Registred Successfully Redirecting to Home Page Now...");
-					req.getRequestDispatcher("./home").forward(req, resp);;
+					resp.sendRedirect("./home");
 				}
 				else {
 					errorString = "Entry with the Same Email Exists ..";

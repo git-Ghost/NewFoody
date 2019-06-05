@@ -38,8 +38,7 @@ public class ConsoleServlet extends HttpServlet {
 					HttpSession session = req.getSession();
 					session.setAttribute("email", emailID);
 					session.setAttribute("name", userInfo.getCname());
-					
-					req.getRequestDispatcher("home").include(req, res);
+					res.sendRedirect("./home");
 				} else
 					res.sendRedirect("./loginFailed");
 			} catch (Exception e) {
