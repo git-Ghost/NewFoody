@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -48,8 +49,13 @@ public class Success extends HttpServlet {
 			boolean status;
 			try {
 				status = userDAO_Obj.createUser(newUser);
-				if(status!=false)
-					resp.sendRedirect("./CreateDone");
+				if(status!=false) {
+					HttpSession session = req.getSession();
+					session.setAttribute("email", newUser.getEmail());
+					session.setAttribute("name", newUser.getCname());
+					log.info("Registred Successfully Redirecting to Home Page Now...");
+					req.getRequestDispatcher("./home").forward(req, resp);;
+				}
 				else {
 					errorString = "Entry with the Same Email Exists ..";
 					req.setAttribute("errorString", errorString);

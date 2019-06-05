@@ -48,9 +48,15 @@ position:fixed;
 </style>
 </head>
 <body>
-
+<% response.setContentType("text/html");
+			HttpSession ses = request.getSession(false);
+			if(ses.getAttribute("name")==null){ %>
+	
 <h1>Seems like you are the first one to visit Foody.</h1>
 <p>Please Wait while we Redirect You to Register page...</p>
 <div class="loader"></div>
+<% }else
+			response.sendRedirect("./home");
+%>
 </body>
 </html>

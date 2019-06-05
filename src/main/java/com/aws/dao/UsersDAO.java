@@ -95,7 +95,7 @@ public class UsersDAO extends Exception{
 				flag = true;
 
 			} catch (Exception e) {
-				log.fatal("Exception Encountered while insertion of record\n" + e.getStackTrace() + "\nRecord Info || "
+				log.fatal("Exception Encountered while insertion of record\n" + e + "\nRecord Info || "
 						+ newUser.toString());
 				trans.rollback();
 				throw new UsersDAO(e.getStackTrace().toString());

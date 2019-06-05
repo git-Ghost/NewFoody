@@ -23,8 +23,8 @@ public class LoginController
     	return "new";
     }
     
-    @RequestMapping(value = { "/home" } ,method = {RequestMethod.POST}) 
-    public String getHomePage() { 
+    @RequestMapping(value = { "/home" } ,method = { RequestMethod.GET, RequestMethod.POST }) 
+    public String navigateHomePage() { 
     	return "home";
     }
 }

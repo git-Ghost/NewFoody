@@ -35,19 +35,11 @@ public class ConsoleServlet extends HttpServlet {
 			try {
 				Users userInfo = userDAO_Obj.getData(emailID, password);
 				if (userInfo != null) {
-					/*
-					 * log.info("Putting Cookie Id as { " + sessionId +
-					 * " } for the current session"); Cookie userCookie = new Cookie("_id",
-					 * sessionId); res.addCookie(userCookie); req.setAttribute("CName",
-					 * userInfo.getCname());
-					 */
 					HttpSession session = req.getSession();
 					session.setAttribute("email", emailID);
 					session.setAttribute("name", userInfo.getCname());
 					
-					// session.invalidate();
-					// HttpSession session = req.getSession(false);
-					req.getRequestDispatcher("./home").forward(req, res);	
+					req.getRequestDispatcher("home").include(req, res);
 				} else
 					res.sendRedirect("./loginFailed");
 			} catch (Exception e) {
