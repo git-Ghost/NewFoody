@@ -22,7 +22,7 @@
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 		
 		<!-- Mapping File/class -->
-		<mapping class="com.aws.domain.Users" />
+		<mapping class="com.aws.domain.FOODY_USERS" />
 
 	</session-factory>
 </hibernate-configuration>

@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 
 import com.aws.dao.UsersDAO;
-import com.aws.domain.Users;
+import com.aws.domain.FOODY_USERS;
 
 @WebServlet({ "/Success" })
 public class Success extends HttpServlet {
@@ -33,16 +34,22 @@ public class Success extends HttpServlet {
 		final String cName = req.getParameter("name").trim();
 		final String cEmail = req.getParameter("email").trim();
 		final String password = req.getParameter("password").trim();
-
+		final String confPwd = req.getParameter("confPwd").trim();
+		
 		if (cName == null || password == null || password.equals("") || cName.equals("")) {
 			log.warn("Invalid Entry Made with CName :: " + cName + " and password :: " + password);
 			log.info("Redirecting To CreateFail Page due to Invalid Entry being made...");
 			errorString = "UserName or Password or Name is invalid!";
 			req.setAttribute("errorString", errorString);
-			resp.sendRedirect("./CreateFail");
+			req.getRequestDispatcher("./CreateFail").include(req, resp);
 		} 
+		else if(!password.equals(confPwd)){
+			errorString = "Confirm Password & Password Must Match !!!";
+			req.setAttribute("errorString", errorString);
+			req.getRequestDispatcher("./CreateFail").include(req, resp);
+		}
 		  else {
-			Users newUser = new Users();
+			FOODY_USERS newUser = new FOODY_USERS();
 			newUser.setCname(cName);
 			newUser.setEmail(cEmail);
 			newUser.setPassword(password);
@@ -53,6 +60,7 @@ public class Success extends HttpServlet {
 					HttpSession session = req.getSession();
 					session.setAttribute("email", newUser.getEmail());
 					session.setAttribute("name", newUser.getCname());
+					session.setMaxInactiveInterval(120);
 					log.info("Registred Successfully Redirecting to Home Page Now...");
 					resp.sendRedirect("./home");
 				}
@@ -61,7 +69,12 @@ public class Success extends HttpServlet {
 					req.setAttribute("errorString", errorString);
 					resp.sendRedirect("./CreateFail");
 				}
-			} catch (SQLException | UsersDAO e) {
+			}catch (ConstraintViolationException e) {
+				errorString = "An Same Person exists with the same Email Id !!!";
+				req.setAttribute("errorString", errorString);
+				req.getRequestDispatcher("./CreateFail").include(req, resp);
+			} 
+			catch (SQLException | UsersDAO e) {
 				log.warn(e);
 				resp.sendRedirect("./error");
 			}

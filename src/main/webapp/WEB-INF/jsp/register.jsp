@@ -12,7 +12,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Register</title>
-<link rel="stylesheet" href="stylesheet.css" type="text/css" />
 <link rel="shortcut icon"
 	href="http://www.iconarchive.com/download/i99695/sonya/swarm/Fast-Food.ico">
 <meta charset="utf-8">
@@ -145,12 +144,18 @@ to {
 								class="form-control" id="password" name="password">
 						</div>
 						<div class="form-group">
-							<label for="password">Confirm Password</label> <input
+							<label for="password">Confirm Password</label> 
+							<!-- <input
 								type="password" placeholder="e.g. Uber@123"
 								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}" required
 								title="Password and Confirm Password must match"
 								class="form-control" id="confPwd" name="confPwd"
-								onkeyup="checkPwd()">
+								onkeyup="checkPwd()" onkeydown="validatePassword()"> -->
+								<input
+								type="password" placeholder="e.g. Uber@123"
+								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}" required
+								title="Password and Confirm Password must match"
+								class="form-control" id="confPwd" name="confPwd" onkeyup="validatePassword()">
 						</div>
 						<div align="center">
 							 <input id="checkBox" type="checkbox"required">
@@ -214,12 +219,24 @@ to {
 			}
 		}
 
-		function checkPwd() {
-			var pwd = document.getElementById("password");
-			var cfPwd = document.getElementById("confPwd");
+		/* function checkPwd() {
+			var pwd = document.getElementById("password").value;
+			var cfPwd = document.getElementById("confPwd").value;
 			return (pwd == cfPwd);
+		} */
+		
+		var password = document.getElementById("password"), 
+		confirm_password = document.getElementById("confPwd");
+		function validatePassword(){
+			if(password.value != confirm_password.value) {
+			    confirm_password.setCustomValidity("Password and Confirm Password must match");
+			  } else {
+			    confirm_password.setCustomValidity('');
+			  }	
 		}
-
+		password.onchange = validatePassword;
+		confirm_password.onkeyup = validatePassword;
+		
 		window.onbeforeunload = function() {
 			var confirmationMessage = "\o/";
 			(e || window.event).returnValue = confirmationMessage; //Gecko + IE

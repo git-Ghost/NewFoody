@@ -12,7 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.aws.dao.UsersDAO;
-import com.aws.domain.Users;
+import com.aws.domain.FOODY_USERS;
+import com.aws.utility.DbTableNames;
 import com.aws.utility.DbUtil;
 
 @WebServlet("/console")
@@ -27,17 +28,18 @@ public class ConsoleServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String emailID = req.getParameter("email");
 		String password = req.getParameter("password");
-		boolean isPresent = DbUtil.checkTableInDb("users");
+		boolean isPresent = DbUtil.checkTableInDb(DbTableNames.FOODY_USERS_TABLE);
 		if (isPresent == false) {
 			log.fatal("No Table can be found for this ...Redirecting to Registration !!!");
 			res.sendRedirect("./new");
 		} else {
 			try {
-				Users userInfo = userDAO_Obj.getData(emailID, password);
+				FOODY_USERS userInfo = userDAO_Obj.getData(emailID, password);
 				if (userInfo != null) {
 					HttpSession session = req.getSession();
 					session.setAttribute("email", emailID);
 					session.setAttribute("name", userInfo.getCname());
+					session.setMaxInactiveInterval(120);
 					res.sendRedirect("./home");
 				} else
 					res.sendRedirect("./loginFailed");

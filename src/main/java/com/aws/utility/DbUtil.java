@@ -99,7 +99,7 @@ public class DbUtil {
 	 * 	Ex,
 	 * 		sqlFile = "/USERS_TABLE_SCRIPT/createTable.sql"
 	 * @return true = if table is created successfully
-	 * 			false = if table creatation is failed
+	 * 			false = if table creation is failed
 	 * 
 	 */
 	public static boolean createTable(String sqlFile) throws IOException,SQLException {
@@ -118,10 +118,7 @@ public class DbUtil {
 			log.info("Executed the Script in the directory --> "+sqlFile);
 			flag=true;
 		}finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-			}
+			con.close();
 		}
 		return flag;
 	}

@@ -70,7 +70,7 @@
 						<div class="form-group">
 							<label for="email">Email</label> <input type="email"
 								class="form-control"
-								pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+								pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
 								title="Please Provide Vaild Mail Id" id="email" name="email"
 								onkeypress="return event.charCode != 32"
 								placeholder="e.g: myFoody@domain.com" onKeyup="checkform()"
