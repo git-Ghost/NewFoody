@@ -108,6 +108,6 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-
+		
 	</dependencies>
 </project>

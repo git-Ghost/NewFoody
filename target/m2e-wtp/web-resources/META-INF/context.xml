@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Context>
-	<Resource name = "db/awsMysqlDb"
+	<Resource name = "db/awsmysql"
 			  auth = "Container" 
 			  type = "javax.sql.DataSource"
 			  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"

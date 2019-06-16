@@ -26,7 +26,7 @@ public class DbUtil {
 	
 	private static Logger log;
 	private static DataSource dataSource ;
-	private static final String JNDI_LOOKUP_SERVICE = "java:/comp/env/db/awsMysqlDb";
+	private static final String JNDI_LOOKUP_SERVICE = "java:/comp/env/db/awsmysql";
 
 	static {
 		log = Logger.getLogger(DbUtil.class);

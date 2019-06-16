@@ -14,7 +14,7 @@
 		<property name="hibernate.connection.password">adminAWS</property>
 		 -->
 		
-		<property name="hibernate.connection.datasource">java:comp/env/db/awsMysqlDb</property>
+		<property name="hibernate.connection.datasource">java:comp/env/db/awsmysql</property>
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>	
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -23,6 +23,8 @@
 		
 		<!-- Mapping File/class -->
 		<mapping class="com.aws.domain.FOODY_USERS" />
-
+		<mapping class="com.aws.domain.FOODY_KFC_MENU" />
+		<mapping class="com.aws.domain.FOODY_STARBUCKS_MENU" />
+		
 	</session-factory>
 </hibernate-configuration>

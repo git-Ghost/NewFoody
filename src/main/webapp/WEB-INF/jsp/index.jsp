@@ -41,6 +41,8 @@ body {
 #content {
 	margin-top: 70px;
 	margin-bottom: 70px;
+	display: flex;
+  justify-content: center;
 }
 
 .footer {
@@ -51,7 +53,7 @@ body {
 	background-color: black;
 	color: white;
 	text-align: center;
-	height: 120px;
+	height: 90px;
 }
 
 #footer-data {
@@ -60,12 +62,12 @@ body {
 </style>
 </head>
 
-<body>
+<body onload="checkRefresh()">
 	<div class="container-fluid">
 		<div class="container-fluid" id="navigationbar">
 			<nav class="navbar navbar-expand-sm">
-				<a class="navbar-brand" href="index.html"> <svg
-						xmlns="http://www.w3.org/2000/svg" viewBox="57 57 369 61"
+				<a class="navbar-brand" href="./index"> 
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="57 57 369 61"
 						height="24px" width="146px" data-reactid="17">
 						<g data-reactid="18">
 						<path fill="#262626"
@@ -80,28 +82,20 @@ body {
 						href="./login">Login</a></li>
 					<li class="nav-item"><a class="nav-link text-danger"
 						href="./register">Register</a></li>
+					<li class="nav-item" id="cart_logo"><a href="cart.jsp"><img
+							src="https://i.ibb.co/wQdbbhw/cart.png" alt="cart" border="0"></a>
+					</li>
+					<li class="nav-item" id="cart_value">
+						<h6></h6>
+					</li>
 				</ul>
 			</nav>
 		</div>
+		
 		<div class="container-fluid" id="content">
 			<div class="row">
 				<div class="col">
-					<a href="./menu.jsp">
-						<div class="card hotel" style="width: 250px">
-							<img class="card-img-top"
-								src="https://i.ibb.co/3Bvqw5T/rest1.jpg" alt="Rest 1"
-								style="width: 100%; height: 150px;">
-							<div class="card-body">
-								<center>
-									<h5 class="card-title">Biryani Zone</h5>
-									<p class="card-text"></p>
-									<center>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col">
-					<a href="./menu.jsp">
+					<a href="menu.jsp?option=kfc">
 						<div class="card hotel" style="width: 250px">
 							<img class="card-img-top"
 								src="https://i.ibb.co/8KX8dGx/rest2.jpg" alt="Rest 1"
@@ -117,47 +111,44 @@ body {
 				</div>
 
 				<div class="col">
-					<a href="./menu.jsp">
+					<a href="menu.jsp?option=star">
 						<div class="card hotel" style="width: 250px">
 							<img class="card-img-top"
-								src="https://i.ibb.co/mDhnNtn/rest3.jpg" alt="Rest 1"
+								src="https://images.wsj.net/im-7089" alt="Rest 1"
 								style="width: 100%; height: 150px;">
 							<div class="card-body">
 								<center>
-									<h5 class="card-title">Pizza Hut</h5>
+									<h5 class="card-title">Starbucks</h5>
 									<p class="card-text"></p>
 									<center>
 							</div>
 						</div>
 					</a>
 				</div>
-				<div class="col">
-					<a href="./menu.jsp">
-						<div class="card hotel" style="width: 250px">
-							<img class="card-img-top"
-								src="https://i.ibb.co/86mx6qW/rest4.png" alt="Rest 1"
-								style="width: 100%; height: 150px;">
-							<div class="card-body">
-								<center>
-									<h5 class="card-title">Dominos</h5>
-									<p class="card-text"></p>
-									<center>
-							</div>
-						</div>
-					</a>
-				</div>
-
-
 			</div>
 		</div>
-
-		<div class="container-fluid footer">
+	<div class="container-fluid footer">
 			<div class="container-fluid" id="footer-data">
 				<h5>Powered By @Foody Technologies</h5>
 			</div>
 		</div>
 
 	</div>
+	<script>
+	function checkRefresh()
+	{
+		 if(document.cookie.indexOf('mycookie')==-1) {
+		    // cookie doesn't exist, create it now
+		    document.cookie = 'mycookie=1';
+		  }
+		else {
+		   // not first visit, so alert
+		   if(localStorage.getItem("cartValue")!= null){
+				$("#cart_value").text(parseInt(localStorage.getItem("cartValue")));
+		   }
+		}
+	};
+	</script>
 </body>
 <% } %>
 </html>
