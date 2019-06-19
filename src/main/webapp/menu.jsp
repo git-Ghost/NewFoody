@@ -131,14 +131,9 @@
 						<img class="card-img-top" src=${item_src} alt="Menu 1"
 							style="width: 100%; height: 150px;">
 						<div class="card-body">
-							<center>
 								<h5 class="card-title">${item_name}</h5>
-								<p class="card-text"></p>
-							<center>
-							<center>
 								<h6 class="card-title">${item_price}</h6>
-							</center>
-							<button class="btn btn-block btn-primary add">Add</button>
+								<button class="btn btn-block btn-primary add">Add</button>
 						</div>
 					</div>
 				</div>
@@ -158,14 +153,9 @@
 							<img class="card-img-top" src=${item_src} alt="Menu 1"
 								style="width: 100%; height: 150px;">
 							<div class="card-body">
-								<center>
-									<h5 class="card-title">${item_name}</h5>
-									<p class="card-text"></p>
-								<center>
-								<center>
+									<h5 class="card-title" >${item_name}</h5>
 									<h6 class="card-title">${item_price}</h6>
-								</center>
-								<button class="btn btn-block btn-primary add">Add</button>
+									<button class="btn btn-block btn-primary add">Add</button>
 							</div>
 						</div>
 					</div>
@@ -183,17 +173,50 @@
 	</div>
 
 		<script>
+			var cart_items = [];
+			var index = 0;
+			var count = new Map();
+			
 			$(".add").click(
 				function(){
 					var cart_val = $("#cart_value").text().trim();
-					console.log("Item Name ---> "+ $("h5[class='card-title']").val());
+					var item = $(this).siblings("h5").text();
+					var price = $(this).siblings("h6").text();
+					
+					if(!count.has(item))
+						count.set(item,1);
+					else
+						count.set(item,count.get(item)+1);
+					
+					var data = { 
+							 "item_name" : item 
+							 , "item_price":price
+							 ,"item_count" : count.get(item)
+							 }; 
+					
+					//Cart Value Add
 					if(localStorage.getItem("cartValue")!= null){
 						cart_val = parseInt(localStorage.getItem("cartValue"))+1;	
 					}
 					else{
 						cart_val = 1;
 					}
+					
+					//Local Storage
 					localStorage.setItem("cartValue",cart_val); 
+					var flag = true;
+					       	
+					for(var i = 0; i < cart_items.length; i++){	
+						 if(cart_items[i]["item_name"] === item){
+							cart_items[i] = data;
+							flag = false;
+						}
+					} 
+					if(flag){
+						cart_items[index] = data;
+						index=index+1;
+					}
+					localStorage.setItem("cart_items", JSON.stringify(cart_items)); 
 					$("#cart_value").text(parseInt(cart_val));
 				}
 			);
