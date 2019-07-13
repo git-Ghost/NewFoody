@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ page session = "false" %>
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -26,7 +28,10 @@
 			style="background-color: #1565C0; color: white;">
 			<h2>Foody Cart</h2>
 		</div>
-		<table class="table table-bordered" id="summary" style="text-align: center;">
+	
+	<form action="./checkOut" method="post">
+		<table class="table table-bordered" id="summary"
+			style="text-align: center;">
 			<thead>
 				<tr>
 					<th>Item Name</th>
@@ -34,30 +39,40 @@
 					<th>Price</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				<tr>
 					<td colspan="2">Total Amount :</td>
 					<td id="net"></td>
-				</tr> 
+				</tr>
 			</tbody>
 		</table>
 		<div class="container-fluid">
 			<center>
-				<button id="checkout" style="width: 50%"
-					class="btn btn-block btn-danger">Proceed To Checkout</button>
+		<!-- <button id="checkout" style="width: 50%"
+					class="btn btn-block btn-danger">Proceed To Checkout</button>  -->
+		<input type="hidden" id="myCart" name="myCart" value="" />
+					<script type="text/javascript">
+						 var elem = document.getElementById("myCart");
+						 var value = localStorage.getItem('cart_items').toString();
+						 elem.value = value;
+					</script>
+		<input type="submit" value="Proceed To Checkout" style="width: 50%"
+					class="btn btn-block btn-danger"/>	
 			</center>
 		</div>
-	</div>
+	 </form>
+</div>
 
-		<script>
-			$("#checkout").click(
+	<script>
+	
+		 /* $("#checkout").click(
 				function(){
 					window.alert("Successfully Ordered");
 					localStorage.clear();
 					window.location ="./index";
 				}		
-			);
+			); */
 			
 			window.onload = function fillData(){
 				var items = JSON.parse(localStorage.getItem('cart_items'));
@@ -75,7 +90,8 @@
 						if(j==2)
 							{
 								cell.innerHTML = items[i]["item_price"]; 
-								var amt = parseFloat(items[i]["item_price"].substr(3, )); //3-Digit Currency Code ignore
+								var amt = parseFloat((parseFloat(items[i]["item_price"].substr(3, ))*parseFloat(items[i]["item_count"])).toFixed(2)); 
+								// 3-Digit Currency Code ignore
 								currencyCode = items[i]["item_price"].substr(0,3);
 								sum = sum + amt;
 							}

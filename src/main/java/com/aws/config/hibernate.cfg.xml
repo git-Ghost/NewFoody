@@ -25,6 +25,8 @@
 		<mapping class="com.aws.domain.FOODY_USERS" />
 		<mapping class="com.aws.domain.FOODY_KFC_MENU" />
 		<mapping class="com.aws.domain.FOODY_STARBUCKS_MENU" />
+		<mapping class="com.aws.domain.FOODY_USER_ORDERS" />
+		<mapping class="com.aws.domain.FOODY_ORDER_DETAILS"/>
 		
 	</session-factory>
 </hibernate-configuration>

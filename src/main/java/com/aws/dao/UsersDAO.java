@@ -107,9 +107,8 @@ public class UsersDAO extends Exception {
 				log.fatal("Exception Encountered while insertion of record\n" + e + "\nRecord Info || "
 						+ newUser.toString());
 				trans.rollback();
-				throw new UsersDAO(e.getStackTrace().toString());
+				throw e;
 			} finally {
-				log.warn("Terminating Session now...");
 				log.info("Released From ReentrantLock for user creation !!!");
 				threadLock.unlock();
 			}
@@ -149,5 +148,29 @@ public class UsersDAO extends Exception {
 			}
 		}
 		return info;
+	}
+	/**
+	 * This method will return customer ID for provided email 
+	 * @param email = Signed Up User Mail iD
+	 * @return = 'FOODY_USERS' Object 
+	 * @throws UsersDAO = if no matching customer can be found
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public FOODY_USERS getUserFromEmail(String email) throws UsersDAO {
+		FOODY_USERS info = null;
+		log.info("Fetching Related Data From Passed Cred >>>> Email :: " + email);
+		Query query = session.createQuery("FROM " +DbTableNames.FOODY_USERS_TABLE+ " user WHERE user.email =:email");
+		query.setParameter("email", email);
+		List<FOODY_USERS> dataList = query.getResultList();
+		
+		if (dataList.size() != 0) {
+			log.info("Match Found with Crendital Pair for >>>> Email :: " + email);
+			for (FOODY_USERS temp : dataList) {
+				info = temp;
+				break;
+			}
+			return (info);
+		}else
+			throw new UsersDAO("No Customer ID Can Be Found For Given Email. MayBe Provided Email "+email+" is invalid ???");
 	}
 }

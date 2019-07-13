@@ -182,7 +182,7 @@
 					var cart_val = $("#cart_value").text().trim();
 					var item = $(this).siblings("h5").text();
 					var price = $(this).siblings("h6").text();
-					
+				
 					if(!count.has(item))
 						count.set(item,1);
 					else
@@ -204,8 +204,9 @@
 					
 					//Local Storage
 					localStorage.setItem("cartValue",cart_val); 
-					var flag = true;
-					       	
+
+					var flag = true;       	
+					//Count increment of pre selected objects
 					for(var i = 0; i < cart_items.length; i++){	
 						 if(cart_items[i]["item_name"] === item){
 							cart_items[i] = data;
@@ -217,7 +218,7 @@
 						index=index+1;
 					}
 					localStorage.setItem("cart_items", JSON.stringify(cart_items)); 
-					$("#cart_value").text(parseInt(cart_val));
+					$("#cart_value").text(parseInt(cart_val));			
 				}
 			);
 			
