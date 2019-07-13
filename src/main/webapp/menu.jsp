@@ -5,7 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
-<%@ page import="java.util.List , java.io.* "%>
+<%@ page import="java.util.List "%>
 <%@ page errorPage="./error" %>
 <%@ page session = "false" %>
 
@@ -14,7 +14,8 @@
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Menu</title>
+		<%String menuType = request.getParameter("option").toUpperCase(); %>
+		<title> <%= menuType %> Menu</title>
 		<link rel="shortcut icon" href="http://www.iconarchive.com/download/i99695/sonya/swarm/Fast-Food.ico">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -117,6 +118,7 @@
 		<div class="container-fluid" id="content">
 			<div class="row">
 			<% String menuOption = request.getParameter("option");
+				System.err.print(menuOption);
 				if(menuOption.equalsIgnoreCase("KFC")){
 					FOODY_KFC_MENU_DAO contents = FOODY_KFC_MENU_DAO.getInstance();
 					List<FOODY_KFC_MENU> temp = contents.getContent();

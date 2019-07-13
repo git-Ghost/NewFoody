@@ -3,6 +3,8 @@ package com.aws.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,6 +15,10 @@ import javax.persistence.Table;
 public class FOODY_ORDER_DETAILS {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ORDER_SEQ")
+    private int id;
+	
 	@ManyToOne(cascade=(CascadeType.PERSIST))
 	@JoinColumn(name="ORDER_ID")
 	private FOODY_USER_ORDERS order_id;
@@ -68,7 +74,7 @@ public class FOODY_ORDER_DETAILS {
 	}
 	@Override
 	public String toString() {
-		return "FOODY_ORDER_DETAILS [order_id=" + order_id + ", order_item=" + order_item + ", quantity=" + quantity
+		return "FOODY_ORDER_DETAILS [order_id=" + order_id.toString() + ", order_item=" + order_item + ", quantity=" + quantity
 				+ ", item_unit_price=" + item_unit_price + "]";
 	}
 }

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import com.aws.dao.FOODY_ORDER_DETAILS_DAO;
 import com.aws.dao.FOODY_USER_ORDERS_DAO;
 import com.aws.dao.UsersDAO;
+import com.aws.domain.FOODY_ORDER_DETAILS;
 import com.aws.domain.FOODY_USERS;
 import com.aws.domain.FOODY_USER_ORDERS;
 import com.foody.pojo.CartItem;
@@ -79,18 +80,21 @@ public class ProcessOrder extends HttpServlet {
 				
 				//Inserting Order Details For the Order-ID
 				
+				for(CartItem temp : data) {
+					String price[] = temp.getItemPrice().split(" ");
+					FOODY_ORDER_DETAILS details = new FOODY_ORDER_DETAILS(newOrder, temp.getItemName(), temp.getItemCount(), Float.parseFloat(price[price.length-1]));
+					orderDetailsInstance.insertDetailsForOrderID(details);
+				}
 				
-				
+				resp.setContentType("text/html");
+				PrintWriter pw = resp.getWriter();
+				pw.println(
+						"<html><head></head><body onload='clearLocal()'><script type='text/javascript'>function clearLocal(){ window.alert(\" Your Food order has been placed Successfully and your Order ID is "+Order_ID+" \"); localStorage.clear(); window.location =\"./index\";}</script></body></html>");
+
 			} catch (UsersDAO e) {
 				log.info(e);
 				resp.sendError(404);
 			}
-
-			resp.setContentType("text/html");
-			PrintWriter pw = resp.getWriter();
-			pw.println(
-					"<html><head></head><body onload='clearLocal()'><script type='text/javascript'>function clearLocal(){ window.alert(\" Your Food order has been placed Successfully and your Order ID is "+Order_ID+" \"); localStorage.clear(); window.location =\"./index\";}</script></body></html>");
-
 		} else {
 			log.warn("No Session Found For Current Session. Redirecting to Login Page Now....");
 			req.getRequestDispatcher("./login").forward(req, resp);

@@ -49,8 +49,6 @@
 		</table>
 		<div class="container-fluid">
 			<center>
-		<!-- <button id="checkout" style="width: 50%"
-					class="btn btn-block btn-danger">Proceed To Checkout</button>  -->
 		<input type="hidden" id="myCart" name="myCart" value="" />
 					<script type="text/javascript">
 						 var elem = document.getElementById("myCart");
@@ -59,21 +57,20 @@
 					</script>
 		<input type="submit" value="Proceed To Checkout" style="width: 50%"
 					class="btn btn-block btn-danger"/>	
+		<input type="button" value="Clear Cart" style="width: 50%"
+					class="btn btn-block btn-danger" onclick="emptyStash()"/>
 			</center>
 		</div>
 	 </form>
 </div>
 
 	<script>
-	
-		 /* $("#checkout").click(
-				function(){
-					window.alert("Successfully Ordered");
-					localStorage.clear();
-					window.location ="./index";
-				}		
-			); */
 			
+		function emptyStash(){
+			localStorage.clear();
+			location.reload();
+		}
+		
 			window.onload = function fillData(){
 				var items = JSON.parse(localStorage.getItem('cart_items'));
 				var table = document.getElementById("summary");

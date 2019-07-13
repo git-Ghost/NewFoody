@@ -94,6 +94,7 @@ body {
 		
 		<div class="container-fluid" id="content">
 			<div class="row">
+				
 				<div class="col">
 					<a href="menu.jsp?option=kfc">
 						<div class="card hotel" style="width: 250px">
@@ -109,8 +110,8 @@ body {
 						</div>
 					</a>
 				</div>
-
-				<div class="col">
+		
+			<div class="col">
 					<a href="menu.jsp?option=star">
 						<div class="card hotel" style="width: 250px">
 							<img class="card-img-top"
@@ -125,6 +126,7 @@ body {
 						</div>
 					</a>
 				</div>
+				
 			</div>
 		</div>
 	<div class="container-fluid footer">
