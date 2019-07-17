@@ -27,7 +27,7 @@ public class FOODY_KFC_MENU_DAO{
 			try {
 				DbUtil.createTable(DbTableNames.FOODY_KFC_MENU_SCRIPT);
 			}catch (IOException | SQLException e) {
-				log.fatal(e);
+				log.error("Exception In Creation of KFC Table ",e);
 				e.printStackTrace();
 			}
 		}

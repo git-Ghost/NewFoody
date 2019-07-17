@@ -62,13 +62,7 @@ public class ProcessOrder extends HttpServlet {
 			try {
 				orderInstance= FOODY_USER_ORDERS_DAO.getInstance();
 				orderDetailsInstance = FOODY_ORDER_DETAILS_DAO.getInstance();
-				
-			} catch (Exception e1) {
-				log.warn("Unable to Get Instance Object For User Order Related Objects");
-				resp.sendError(400);
-			}
-			
-			try {
+
 				// Fetching Email Attribute from the HTTPSession Attribute
 				String identifierMail = (String) session.getAttribute("email");
 				// Fetching CID for the given User Mail ID
@@ -90,10 +84,9 @@ public class ProcessOrder extends HttpServlet {
 				PrintWriter pw = resp.getWriter();
 				pw.println(
 						"<html><head></head><body onload='clearLocal()'><script type='text/javascript'>function clearLocal(){ window.alert(\" Your Food order has been placed Successfully and your Order ID is "+Order_ID+" \"); localStorage.clear(); window.location =\"./index\";}</script></body></html>");
-
-			} catch (UsersDAO e) {
-				log.info(e);
-				resp.sendError(404);
+			
+			} catch (Exception e1) {
+				log.error( "Unable to Get Instance Object For User Order Related Objects !", e1 );
 			}
 		} else {
 			log.warn("No Session Found For Current Session. Redirecting to Login Page Now....");

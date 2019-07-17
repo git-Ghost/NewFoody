@@ -16,7 +16,6 @@ public class FOODY_ORDER_DETAILS_DAO extends Exception{
 
 	private static final long serialVersionUID = -1992200230745800141L;
 	Logger log = Logger.getLogger(this.getClass());
-	private static boolean reflect = true; // To Check the Table Presence
 	SessionFactory factory;
 	Session session;
 	private static FOODY_ORDER_DETAILS_DAO instance = null;
@@ -36,31 +35,32 @@ public class FOODY_ORDER_DETAILS_DAO extends Exception{
 	 * 
 	 * @throws IOException
 	 * @throws SQLException
-	 * @throws FOODY_USER_ORDERS_DAO
+	 * @throws FOODY_ORDER_DETAILS_DAO
 	 */
-	private FOODY_ORDER_DETAILS_DAO() throws IOException, SQLException, FOODY_USER_ORDERS_DAO {
+	private FOODY_ORDER_DETAILS_DAO() throws IOException, SQLException, FOODY_ORDER_DETAILS_DAO  {
 		factory = DbUtil.getSessionFactory();
 		session = factory.openSession();
-		if (reflect) {
-			reflect=false;
-			boolean flag = DbUtil.checkTableInDb(DbTableNames.FOODY_ORDER_DETAILS);
-			if (flag != true) {
-				log.warn("!!! " + DbTableNames.FOODY_ORDER_DETAILS + " TABLE WASN'T FOUND IN SCHEMA !!!\nCreating Table "
-						+ DbTableNames.FOODY_ORDER_DETAILS + " Now...");
-				boolean tStatus = DbUtil.createTable(DbTableNames.FOODY_ORDER_DETAILS_SCRIPT);
-				if (tStatus == true)
-					log.info(DbTableNames.FOODY_ORDER_DETAILS + " Table Created Successfull in the Schema");
-				else
-					throw new FOODY_USER_ORDERS_DAO(
-							DbTableNames.FOODY_ORDER_DETAILS + " Table Creation Failed Throwing New Exception ...");
-			}
+		
+		boolean flag = DbUtil.checkTableInDb(DbTableNames.FOODY_ORDER_DETAILS);
+		if (flag == false) {
+			log.warn("!!! " + DbTableNames.FOODY_ORDER_DETAILS + " TABLE WASN'T FOUND IN SCHEMA !!!\nCreating Table "
+					+ DbTableNames.FOODY_ORDER_DETAILS + " Now...");
+			boolean tStatus = DbUtil.createTable(DbTableNames.FOODY_ORDER_DETAILS_SCRIPT);
+			if (tStatus == true)
+				log.info(DbTableNames.FOODY_ORDER_DETAILS + " Table Created Successfull in the Schema");
+			else
+				throw new FOODY_ORDER_DETAILS_DAO(
+						DbTableNames.FOODY_ORDER_DETAILS + " Table Creation Failed Throwing New Exception ...");
 		}
 	}
 	/**
 	 * New Entry Insertion of Order Into the DB
 	 * @param newOrder = Unique Order Id For the Customer
+	 * @throws SQLException 
+	 * @throws IOException 
+	 * @throws FOODY_USER_ORDERS_DAO 
 	 */
-	public void insertDetailsForOrderID(FOODY_ORDER_DETAILS newOrderDetails) {
+	public void insertDetailsForOrderID(FOODY_ORDER_DETAILS newOrderDetails) throws IOException, SQLException, FOODY_USER_ORDERS_DAO {
 		Transaction trans = null;
 		try{
 			trans = session.beginTransaction();
@@ -82,8 +82,9 @@ public class FOODY_ORDER_DETAILS_DAO extends Exception{
 	 * @throws IOException
 	 * @throws SQLException
 	 * @throws FOODY_USER_ORDERS_DAO
+	 * @throws FOODY_ORDER_DETAILS_DAO 
 	 */
-	public static FOODY_ORDER_DETAILS_DAO getInstance() throws IOException, SQLException, FOODY_USER_ORDERS_DAO {
+	public static FOODY_ORDER_DETAILS_DAO getInstance() throws IOException, SQLException, FOODY_ORDER_DETAILS_DAO {
 		if (instance == null)
 			return new FOODY_ORDER_DETAILS_DAO();
 		else

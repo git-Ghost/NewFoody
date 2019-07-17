@@ -118,7 +118,6 @@
 		<div class="container-fluid" id="content">
 			<div class="row">
 			<% String menuOption = request.getParameter("option");
-				System.err.print(menuOption);
 				if(menuOption.equalsIgnoreCase("KFC")){
 					FOODY_KFC_MENU_DAO contents = FOODY_KFC_MENU_DAO.getInstance();
 					List<FOODY_KFC_MENU> temp = contents.getContent();
