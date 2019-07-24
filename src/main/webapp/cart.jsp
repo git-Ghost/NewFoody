@@ -94,7 +94,7 @@
 							}
 					}
 				}
-				document.getElementById("net").innerText = currencyCode + " " + sum;
+				document.getElementById("net").innerText = currencyCode + " " + sum.toFixed(2);
 			};
 		</script>
 </body>

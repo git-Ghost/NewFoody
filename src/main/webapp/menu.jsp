@@ -7,7 +7,6 @@
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <%@ page import="java.util.List "%>
 <%@ page errorPage="./error" %>
-<%@ page session = "false" %>
 
 <html>
 <head>
@@ -174,9 +173,20 @@
 	</div>
 
 		<script>
-			var cart_items = [];
-			var index = 0;
 			var count = new Map();
+			var cart_items;
+			var index;
+			
+			try{
+				cart_items = JSON.parse(localStorage.getItem("cart_items"));
+				index = cart_items.length;
+				for(var i = 0; i < cart_items.length; i++){	
+					count.set(cart_items[i]["item_name"],cart_items[i]["item_count"]);
+				}
+			}catch(err){
+				cart_items = [];
+				index = 0;	
+			}
 			
 			$(".add").click(
 				function(){
@@ -188,7 +198,6 @@
 						count.set(item,1);
 					else
 						count.set(item,count.get(item)+1);
-					
 					var data = { 
 							 "item_name" : item 
 							 , "item_price":price
