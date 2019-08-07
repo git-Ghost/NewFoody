@@ -1,4 +1,4 @@
-package com.aws.loginCheck;
+package com.aws.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import com.aws.dao.UsersDAO;
 import com.aws.domain.FOODY_USERS;
 
-@WebServlet({ "/Success" })
+@WebServlet("/Success")
 public class Success extends HttpServlet {
 	
 	private static final long serialVersionUID = -8175337090332985511L;

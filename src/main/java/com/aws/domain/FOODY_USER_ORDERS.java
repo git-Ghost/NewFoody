@@ -102,4 +102,12 @@ public class FOODY_USER_ORDERS {
 	public void setSumAmt(float sumAmt) {
 		this.sumAmt = sumAmt;
 	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public Time getTime() {
+		return time;
+	}
 }

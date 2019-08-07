@@ -173,4 +173,26 @@ public class UsersDAO extends Exception {
 		}else
 			throw new UsersDAO("No Customer ID Can Be Found For Given Email. MayBe Provided Email "+email+" is invalid ???");
 	}
+	/**
+	 * This method will update the user details
+	 * @param user = FOODY_USERS Object which is to be updated
+	 * @return true = If change has been made into DB
+	 * @return false = If Update gets failed
+	 */
+	public boolean updateUser(FOODY_USERS user) {
+		boolean status = false;
+		log.info("Updating User Details into DB --> "+user.toString());
+		Transaction trans = null;
+		try {
+			trans = session.beginTransaction();
+			session.update(user);
+			trans.commit();
+			status = true;
+			log.info("User Data Update ---> Success");
+		}catch (Exception e) {
+			log.info("User Data Update ---> Failed");
+			trans.rollback();
+		}
+		return status;
+	}
 }

@@ -2,13 +2,17 @@ package com.aws.dao;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import com.aws.domain.FOODY_ORDER_DETAILS;
+import com.aws.domain.FOODY_USER_ORDERS;
 import com.aws.utility.DbTableNames;
 import com.aws.utility.DbUtil;
 
@@ -73,6 +77,14 @@ public class FOODY_ORDER_DETAILS_DAO extends Exception{
 			trans.rollback();
 			throw e;
 		}
+	}
+	
+	@SuppressWarnings({"deprecation","unchecked"})
+	public List<FOODY_ORDER_DETAILS> getOrderDetails(FOODY_USER_ORDERS uniqueOrder){
+		Criteria criteria = session.createCriteria(FOODY_ORDER_DETAILS.class);
+		criteria.add(Restrictions.eq("order_id", uniqueOrder));
+		List<FOODY_ORDER_DETAILS> orderDetails = (List<FOODY_ORDER_DETAILS>)(List<?>)criteria.list();
+		return orderDetails;
 	}
 	
 	/**

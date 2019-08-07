@@ -145,13 +145,7 @@ to {
 						</div>
 						<div class="form-group">
 							<label for="password">Confirm Password</label> 
-							<!-- <input
-								type="password" placeholder="e.g. Uber@123"
-								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}" required
-								title="Password and Confirm Password must match"
-								class="form-control" id="confPwd" name="confPwd"
-								onkeyup="checkPwd()" onkeydown="validatePassword()"> -->
-								<input
+							<input
 								type="password" placeholder="e.g. Uber@123"
 								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}" required
 								title="Password and Confirm Password must match"
@@ -219,12 +213,6 @@ to {
 			}
 		}
 
-		/* function checkPwd() {
-			var pwd = document.getElementById("password").value;
-			var cfPwd = document.getElementById("confPwd").value;
-			return (pwd == cfPwd);
-		} */
-		
 		var password = document.getElementById("password"), 
 		confirm_password = document.getElementById("confPwd");
 		function validatePassword(){
