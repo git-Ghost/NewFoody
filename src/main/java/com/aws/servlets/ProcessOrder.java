@@ -56,7 +56,7 @@ public class ProcessOrder extends HttpServlet {
 				String info[] = temp.getItemPrice().split(" ");
 				if (currencyCode == null)
 					currencyCode = info[0];
-				totalOrderAmt = totalOrderAmt + Float.parseFloat(info[1]);
+				totalOrderAmt = totalOrderAmt + (temp.getItemCount() * Float.parseFloat(info[1]));
 			}
 			
 			try {

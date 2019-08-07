@@ -22,8 +22,7 @@ public class Success extends HttpServlet {
 	private static final long serialVersionUID = -8175337090332985511L;
 	Logger log = Logger.getLogger(getClass());
 	String errorString = null;
-	UsersDAO userDAO_Obj = UsersDAO.getInstance();
-	
+
 	/**
 	 * doPost method for registration page
 	 */
@@ -54,13 +53,15 @@ public class Success extends HttpServlet {
 			newUser.setEmail(cEmail);
 			newUser.setPassword(password);
 			boolean status;
+			UsersDAO userDAO_Obj = UsersDAO.getInstance();
+			
 			try {
 				status = userDAO_Obj.createUser(newUser);
 				if(status!=false) {
 					HttpSession session = req.getSession();
 					session.setAttribute("email", newUser.getEmail());
 					session.setAttribute("name", newUser.getCname());
-					session.setMaxInactiveInterval(120);
+				//	session.setMaxInactiveInterval(120);
 					log.info("Registred Successfully Redirecting to Home Page Now...");
 					resp.sendRedirect("./home");
 				}
@@ -75,15 +76,12 @@ public class Success extends HttpServlet {
 				req.getRequestDispatcher("./CreateFail").include(req, resp);
 			} 
 			catch (SQLException | UsersDAO e) {
-				log.warn(e);
+				log.error(e);
 				resp.sendRedirect("./error");
 			}
+			finally {
+				userDAO_Obj.tearDown();
+			}
 		}
-	}
-	
-	@Override
-	public void destroy() {
-		userDAO_Obj.tearDown();
-		super.destroy();
 	}
 }

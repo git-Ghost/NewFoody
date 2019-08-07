@@ -20,8 +20,6 @@ import com.aws.utility.DbUtil;
 public class ConsoleServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	UsersDAO userDAO_Obj = UsersDAO.getInstance();
-	// private final String sessionId = UUID.randomUUID().toString();
 	Logger log = Logger.getLogger(this.getClass());
 
 	@Override
@@ -33,19 +31,22 @@ public class ConsoleServlet extends HttpServlet {
 			log.fatal("No Table can be found for this ...Redirecting to Registration !!!");
 			res.sendRedirect("./new");
 		} else {
+			UsersDAO userDAO_Obj = UsersDAO.getInstance();
 			try {
 				FOODY_USERS userInfo = userDAO_Obj.getData(emailID, password);
 				if (userInfo != null) {
 					HttpSession session = req.getSession();
 					session.setAttribute("email", emailID);
 					session.setAttribute("name", userInfo.getCname());
-					session.setMaxInactiveInterval(120);
+			//		session.setMaxInactiveInterval(120);
 					res.sendRedirect("./home");
 				} else
 					res.sendRedirect("./loginFailed");
 			} catch (Exception e) {
-				log.fatal(e);
+				log.error(e);
 				res.sendRedirect("./error");
+			}finally {
+				userDAO_Obj.tearDown();
 			}
 		}
 	}
@@ -56,11 +57,5 @@ public class ConsoleServlet extends HttpServlet {
 			this.doGet(req, res);
 		else
 			res.sendRedirect("./loginFailed");
-	}
-
-	@Override
-	public void destroy() {
-		userDAO_Obj.tearDown();
-		super.destroy();
 	}
 }

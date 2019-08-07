@@ -28,8 +28,8 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Nunito"
 	rel="stylesheet">
-	
-	
+
+
 <style>
 body {
 	font-family: 'Nunito', sans-serif;
@@ -127,7 +127,6 @@ th, td {
 th {
 	text-align: center;
 }
-
 </style>
 </head>
 
@@ -167,9 +166,12 @@ th {
 
 		<div id="Me" class="tabcontent">
 			&nbsp; &nbsp; &nbsp;
-			<h3>Name :: <%= ses.getAttribute("name")%></h3>
+			<h3>
+				Name ::
+				<%=ses.getAttribute("name")%></h3>
 			<p>
-				Email :: <%= ses.getAttribute("email")%></p>
+				Email ::
+				<%=ses.getAttribute("email")%></p>
 			<p>Member Since</p>
 			<p>Address</p>
 		</div>
@@ -228,8 +230,7 @@ th {
 						</tr>
 					</tbody>
 				</table>
-				<br>
-				<input type="submit" value="Change Address"> <input
+				<br> <input type="submit" value="Change Address"> <input
 					type="reset" value="Clear">
 			</form>
 		</div>
@@ -239,15 +240,20 @@ th {
 			<h3>Review Order History</h3>
 			<br>
 			<%
-				FOODY_USER_ORDERS_DAO orders = FOODY_USER_ORDERS_DAO.getInstance();
-				FOODY_ORDER_DETAILS_DAO orderDetails = FOODY_ORDER_DETAILS_DAO.getInstance();
-				UsersDAO user = UsersDAO.getInstance();
-				ArrayList<FOODY_USER_ORDERS> currentUserOrders = orders
-						.getAllOrdersForUser(user.getUserFromEmail((String) ses.getAttribute("email")));
-				Map<String, List<FOODY_ORDER_DETAILS>> data = new HashMap<String, List<FOODY_ORDER_DETAILS>>();
-				for (FOODY_USER_ORDERS temp : currentUserOrders) {
-					data.put(temp.getOrder_id(), orderDetails.getOrderDetails(temp));
-				}
+				FOODY_USER_ORDERS_DAO orders;
+					FOODY_ORDER_DETAILS_DAO orderDetails = null;
+					UsersDAO user;
+					ArrayList<FOODY_USER_ORDERS> currentUserOrders = null;
+
+					orders = FOODY_USER_ORDERS_DAO.getInstance();
+					orderDetails = FOODY_ORDER_DETAILS_DAO.getInstance();
+					user = UsersDAO.getInstance();
+					currentUserOrders = orders
+							.getAllOrdersForUser(user.getUserFromEmail((String) ses.getAttribute("email")));
+					Map<String, List<FOODY_ORDER_DETAILS>> data = new HashMap<String, List<FOODY_ORDER_DETAILS>>();
+					for (FOODY_USER_ORDERS temp : currentUserOrders) {
+						data.put(temp.getOrder_id(), orderDetails.getOrderDetails(temp));
+					}
 			%>
 
 			<table style="width: 100%">
@@ -260,8 +266,10 @@ th {
 					</tr>
 
 					<!-- DB Fetched the Information -->
-					<%if(currentUserOrders!=null){ 
-						for (FOODY_USER_ORDERS temp : currentUserOrders) {%>
+					<%
+						if (currentUserOrders.size() >= 1) {
+								for (FOODY_USER_ORDERS temp : currentUserOrders) {
+					%>
 					<tr>
 						<td>
 							<button type="button" onclick="showHide(this)">Details</button>
@@ -273,17 +281,21 @@ th {
 										<th>Quantity</th>
 										<th>Unit Price</th>
 									</tr>
-										<%List<FOODY_ORDER_DETAILS> details = data.get(temp.getOrder_id());
-											int counter = 1;
-										  for(FOODY_ORDER_DETAILS obj : details){
-										%>
-										<tr>
-											<td><%= counter%></td>
-											<td><%= obj.getOrder_item()%></td>
-											<td><%= obj.getQuantity()%></td>
-											<td><%= obj.getItem_unit_price()%></td>
-										</tr>
-										<% counter++; } %>
+									<%
+										List<FOODY_ORDER_DETAILS> details = data.get(temp.getOrder_id());
+													int counter = 1;
+													for (FOODY_ORDER_DETAILS obj : details) {
+									%>
+									<tr>
+										<td><%=counter%></td>
+										<td><%=obj.getOrder_item()%></td>
+										<td><%=obj.getQuantity()%></td>
+										<td><%=obj.getItem_unit_price()%></td>
+									</tr>
+									<%
+										counter++;
+													}
+									%>
 								</tbody>
 							</table>
 						</td>
@@ -291,13 +303,16 @@ th {
 						<td><%=temp.getDate()%><br><%=temp.getTime()%></td>
 						<td><%=temp.getSumAmt()%></td>
 					</tr>
-					<% }
-					}else{
+					<%
+						}
+							} else {
 					%>
 					<tr>
-						<td colspan="4">No Orders Can Be Found ...</td>
+						<td colspan="4" align="center">No Orders Can Be Found ...</td>
 					</tr>
-					<%}%>
+					<%
+						}
+					%>
 				</tbody>
 			</table>
 		</div>
@@ -312,67 +327,68 @@ th {
 	</div>
 
 	<script>
-	
-	function showHide(obj){
-		console.log("Inside the ONCLICK");
-		var tbody = obj.parentNode.getElementsByTagName("table")[0];
-		var old = tbody.style.display;
-		tbody.style.display = (old == "none"?"":"none");
-	}
-	
-	//OPEN SELECTABLE WINDOW
-	function openTab(evt, cityName) {
-		  var i, tabcontent, tablinks;
-		  tabcontent = document.getElementsByClassName("tabcontent");
-		  for (i = 0; i < tabcontent.length; i++) {
-		    tabcontent[i].style.display = "none";
-		  }
-		  tablinks = document.getElementsByClassName("tablinks");
-		  for (i = 0; i < tablinks.length; i++) {
-		    tablinks[i].className = tablinks[i].className.replace(" active", "");
-		  }
-		  document.getElementById(cityName).style.display = "block";
-		  evt.currentTarget.className += " active";
+		function showHide(obj) {
+			console.log("Inside the ONCLICK");
+			var tbody = obj.parentNode.getElementsByTagName("table")[0];
+			var old = tbody.style.display;
+			tbody.style.display = (old == "none" ? "" : "none");
+		}
+
+		//OPEN SELECTABLE WINDOW
+		function openTab(evt, cityName) {
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(
+						" active", "");
+			}
+			document.getElementById(cityName).style.display = "block";
+			evt.currentTarget.className += " active";
 		}
 
 		// Get the element with id="defaultOpen" and click on it
 		document.getElementById("defaultOpen").click();
-		
-	// PASSWORD VALIDATION
-		var password = document.getElementById("password"), 
-		confirm_password = document.getElementById("confPwd")
+
+		// PASSWORD VALIDATION
+		var password = document.getElementById("password"), confirm_password = document
+				.getElementById("confPwd")
 		oldPwd = document.getElementById("oldPwd");
-		
+
 		function checkDiffer() {
-			if(password.value != old.value) {
-			    confirm_password.setCustomValidity('');
-			  } else {
-			    confirm_password.setCustomValidity("Old and New Password Can't be same");
-			  }	
+			if (password.value != old.value) {
+				confirm_password.setCustomValidity('');
+			} else {
+				confirm_password
+						.setCustomValidity("Old and New Password Can't be same");
+			}
 		}
-	// PASSWORD VALIDATION
-		function validatePassword(){
-			if(password.value != confirm_password.value) {
-			    confirm_password.setCustomValidity("Password and Confirm Password must match");
-			  } else {
-			    confirm_password.setCustomValidity('');
-			  }	
+		// PASSWORD VALIDATION
+		function validatePassword() {
+			if (password.value != confirm_password.value) {
+				confirm_password
+						.setCustomValidity("Password and Confirm Password must match");
+			} else {
+				confirm_password.setCustomValidity('');
+			}
 		}
 		password.onchange = validatePassword;
 		confirm_password.onkeyup = validatePassword;
-		
-	//POP-UP WHEN FIELD VALUE IS PROVIDED
+
+		//POP-UP WHEN FIELD VALUE IS PROVIDED
 		window.onbeforeunload = function() {
 			var confirmationMessage = "\o/";
 			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
 			return confirmationMessage; //Webkit, Safari, Chrome
 		};
-		
 	</script>
 </body>
 <%
-	 } else {
+	} else {
 		response.sendRedirect("./login");
-	} 
+	}
 %>
 </html>

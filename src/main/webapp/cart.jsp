@@ -56,7 +56,7 @@
 						 elem.value = value;
 					</script>
 		<input type="submit" value="Proceed To Checkout" style="width: 50%"
-					class="btn btn-block btn-danger"/>	
+					class="btn btn-block btn-danger" id="process" disabled="disabled"/>	
 		<input type="button" value="Clear Cart" style="width: 50%"
 					class="btn btn-block btn-danger" onclick="emptyStash()"/>
 			</center>
@@ -65,7 +65,8 @@
 </div>
 
 	<script>
-			
+		var flag = 0;
+		
 		function emptyStash(){
 			localStorage.clear();
 			location.reload();
@@ -93,9 +94,11 @@
 								sum = sum + amt;
 							}
 					}
+					document.getElementById("process").disabled = false;
 				}
 				document.getElementById("net").innerText = currencyCode + " " + sum.toFixed(2);
 			};
+		
 		</script>
 </body>
 

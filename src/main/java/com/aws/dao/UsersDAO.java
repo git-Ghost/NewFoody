@@ -52,6 +52,7 @@ public class UsersDAO extends Exception {
 			log.warn("Closing Session & Factory Objects...");
 			session.close();
 			factory.close();
+			instance = null;
 		}
 	}
 
@@ -158,13 +159,13 @@ public class UsersDAO extends Exception {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FOODY_USERS getUserFromEmail(String email) throws UsersDAO {
 		FOODY_USERS info = null;
-		log.info("Fetching Related Data From Passed Cred >>>> Email :: " + email);
+		log.info("Fetching Related Data From Passed Mail-Id >>>> Email :: " + email);
 		Query query = session.createQuery("FROM " +DbTableNames.FOODY_USERS_TABLE+ " user WHERE user.email =:email");
 		query.setParameter("email", email);
 		List<FOODY_USERS> dataList = query.getResultList();
 		
 		if (dataList.size() != 0) {
-			log.info("Match Found with Crendital Pair for >>>> Email :: " + email);
+			log.info("Match Found with >>>> Email :: " + email);
 			for (FOODY_USERS temp : dataList) {
 				info = temp;
 				break;

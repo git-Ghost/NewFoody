@@ -109,5 +109,6 @@ public class FOODY_USER_ORDERS_DAO extends Exception {
 	public void destory() {
 		session.close();
 		factory.close();
+		instance = null;
 	}
 }
