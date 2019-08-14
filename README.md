@@ -22,3 +22,5 @@ To Use this application, get the latest checkout from the master branch.
    2. Provide the log directory path, which will be configured with log4j.properties (located at : src/main/webapp/WEB-INF/classes folder)
    3. FOODY_USERS Table must be present in the DB at least as this won't be created automatically via code 
    4. TimeZone Setting need to be configured as per the timeZone, found in conf.json file (located at : src/main/resources) [NB: PST/IST won't accepeted instead use Asia/kolkata example]
+
+Post checkout get the war file for the project and deploy in installed Tomcat Server
