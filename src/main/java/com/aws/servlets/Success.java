@@ -1,7 +1,6 @@
 package com.aws.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -52,6 +51,7 @@ public class Success extends HttpServlet {
 			newUser.setCname(cName);
 			newUser.setEmail(cEmail);
 			newUser.setPassword(password);
+			newUser.setAddress(null);
 			boolean status;
 			UsersDAO userDAO_Obj = UsersDAO.getInstance();
 			
@@ -75,7 +75,7 @@ public class Success extends HttpServlet {
 				req.setAttribute("errorString", errorString);
 				req.getRequestDispatcher("./CreateFail").include(req, resp);
 			} 
-			catch (SQLException | UsersDAO e) {
+			catch (Exception e) {
 				log.error(e);
 				resp.sendRedirect("./error");
 			}

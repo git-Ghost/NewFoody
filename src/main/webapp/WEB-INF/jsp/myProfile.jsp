@@ -5,6 +5,7 @@
 <%@ page import="com.aws.domain.*"%>
 <%@ page import="com.aws.dao.*"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.text.*"%>
 <%@ page session="false"%>
 
 <html>
@@ -153,6 +154,10 @@ th {
 			</nav>
 		</div>
 
+		<%
+			FOODY_USERS user = UsersDAO.getInstance().getUserFromEmail((String) ses.getAttribute("email"));
+		%>
+
 		<div class="tab">
 			<button class="tablinks" onclick="openTab(event, 'Me')"
 				id="defaultOpen">About Me</button>
@@ -172,8 +177,30 @@ th {
 			<p>
 				Email ::
 				<%=ses.getAttribute("email")%></p>
-			<p>Member Since</p>
-			<p>Address</p>
+			<p>
+				<%
+					DateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
+						String text = df.format(user.getDoj());
+				%>
+				Member Since ::
+				<%=text%></p>
+
+			<%
+				String add = user.getAddress();
+					if (add != null) {
+			%>
+			<p>
+				Address ::
+				<%=add%>
+			</p>
+			<%
+				} else {
+			%>
+			<p>Address :: No Address Can be Found</p>
+			<%
+				}
+			%>
+
 		</div>
 
 		<div id="Pwd" class="tabcontent">
@@ -185,29 +212,31 @@ th {
 					<tbody>
 						<tr>
 							<td>Old Password :</td>
-							<td><input type="password" name="oldPwd" autocomplete="off"
+							<td><input type="password" name="oldPwd" autocomplete="off" id="oldPwd"
 								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}" required
-								title="Must contain at least one number and one uppercase and lowercase letter, and at least 5 but less than 10 characters"><br>
+								title="Must contain at least one number and one uppercase and lowercase letter, and at least 5 but less than 10 characters" 
+								onkeyup="checkDiffer()" required><br>
 							</td>
 						</tr>
 						<tr>
 							<td>New Password :</td>
-							<td><input type="password" name="password"
+							<td><input type="password" name="password" id="password"
 								autocomplete="off"
 								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}" required
-								title="Must contain at least one number and one uppercase and lowercase letter, and at least 5 but less than 10 characters"
-								onkeyup="checkDiffer()"><br></td>
+								title="Must contain at least one number and one uppercase and lowercase letter, and at least 5 but less than 10 characters" 
+								onkeyup="checkDiffer()" required><br></td>
 						</tr>
 						<tr>
 							<td>Retype Password :</td>
-							<td><input type="password" name="confPwd" autocomplete="off"
-								title="Password and Confirm Password must match"
-								onkeyup="validatePassword()"><br></td>
+							<td><input type="password" name="confPwd" id="confPwd" autocomplete="off"
+								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}"
+								title="Password and Confirm Password must match" 
+								onkeypress="enable()" required><br></td>
 						</tr>
 					</tbody>
 				</table>
-				<br> <input type="submit" value="Change Password"> <input
-					type="reset" value="Clear">
+				<br> <input type="submit" value="Change Password" id="submit" onClick="confSubmit(this.form)"> 
+				<input type="reset" value="Clear">
 			</form>
 		</div>
 
@@ -220,7 +249,19 @@ th {
 					<tbody>
 						<tr>
 							<td>Current Address :</td>
-							<td><label>NOW ADDRESS</label></td>
+							<%
+								if (add != null) {
+							%>
+							<td><label><%=add%></label></td>
+
+							<%
+								} else {
+							%>
+							<td><label> No Address Can be Found</label></td>
+							<%
+								}
+							%>
+
 						</tr>
 
 						<tr>
@@ -230,8 +271,9 @@ th {
 						</tr>
 					</tbody>
 				</table>
-				<br> <input type="submit" value="Change Address"> <input
-					type="reset" value="Clear">
+				<br> <input type="submit" value="Change Address"
+					onClick="confSubmit(this.form);"> <input type="reset"
+					value="Clear">
 			</form>
 		</div>
 
@@ -242,14 +284,11 @@ th {
 			<%
 				FOODY_USER_ORDERS_DAO orders;
 					FOODY_ORDER_DETAILS_DAO orderDetails = null;
-					UsersDAO user;
 					ArrayList<FOODY_USER_ORDERS> currentUserOrders = null;
 
 					orders = FOODY_USER_ORDERS_DAO.getInstance();
 					orderDetails = FOODY_ORDER_DETAILS_DAO.getInstance();
-					user = UsersDAO.getInstance();
-					currentUserOrders = orders
-							.getAllOrdersForUser(user.getUserFromEmail((String) ses.getAttribute("email")));
+					currentUserOrders = orders.getAllOrdersForUser(user);
 					Map<String, List<FOODY_ORDER_DETAILS>> data = new HashMap<String, List<FOODY_ORDER_DETAILS>>();
 					for (FOODY_USER_ORDERS temp : currentUserOrders) {
 						data.put(temp.getOrder_id(), orderDetails.getOrderDetails(temp));
@@ -283,6 +322,7 @@ th {
 									</tr>
 									<%
 										List<FOODY_ORDER_DETAILS> details = data.get(temp.getOrder_id());
+													//For Serial No
 													int counter = 1;
 													for (FOODY_ORDER_DETAILS obj : details) {
 									%>
@@ -327,6 +367,12 @@ th {
 	</div>
 
 	<script>
+		function confSubmit(form) {
+			if (confirm("Are you sure you want to update the data?")) {
+				form.submit();
+			}
+		}
+
 		function showHide(obj) {
 			console.log("Inside the ONCLICK");
 			var tbody = obj.parentNode.getElementsByTagName("table")[0];
@@ -353,30 +399,41 @@ th {
 		// Get the element with id="defaultOpen" and click on it
 		document.getElementById("defaultOpen").click();
 
-		// PASSWORD VALIDATION
 		var password = document.getElementById("password"), confirm_password = document
 				.getElementById("confPwd")
 		oldPwd = document.getElementById("oldPwd");
 
 		function checkDiffer() {
-			if (password.value != old.value) {
-				confirm_password.setCustomValidity('');
+			if (password.value === oldPwd.value) {
+				alert("Old and New Password Can't be same");
+				document.getElementById("submit").disabled = true;
 			} else {
-				confirm_password
-						.setCustomValidity("Old and New Password Can't be same");
+				document.getElementById("submit").disabled = false;
 			}
 		}
 		// PASSWORD VALIDATION
 		function validatePassword() {
 			if (password.value != confirm_password.value) {
-				confirm_password
-						.setCustomValidity("Password and Confirm Password must match");
+				alert("Password and Confirm Password must match");
+				document.getElementById("submit").disabled = true;
+				return false;
 			} else {
-				confirm_password.setCustomValidity('');
+				document.getElementById("submit").disabled = false;
+				return true;
 			}
 		}
-		password.onchange = validatePassword;
-		confirm_password.onkeyup = validatePassword;
+		function enable() {
+			document.getElementById("submit").disabled = false;
+		}
+
+		function confSubmit(form) {
+			var x = validatePassword();
+			if (x) {
+				if (confirm("Are you sure you want to update the data?")) {
+					form.submit();
+				}
+			}
+		}
 
 		//POP-UP WHEN FIELD VALUE IS PROVIDED
 		window.onbeforeunload = function() {

@@ -1,8 +1,8 @@
 package com.aws.domain;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
-import java.util.Calendar;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.aws.utility.FoodyProp;
 
 @Entity
 @Table(name = "FOODY_USER_ORDERS")
@@ -47,8 +49,9 @@ public class FOODY_USER_ORDERS {
 	 * @param id = Customer Id Fetched from the database
 	 * @param code = Currency Code for the Transaction in question
 	 * @param amt = Total Amount For the particular Order
+	 * @throws IOException 
 	 */
-	public FOODY_USER_ORDERS(String order,FOODY_USERS user,String code,float amt) { 
+	public FOODY_USER_ORDERS(String order,FOODY_USERS user,String code,float amt) throws IOException { 
 		this.order_id = order;
 		this.user = user;
 		this.curCode = code;
@@ -58,12 +61,11 @@ public class FOODY_USER_ORDERS {
 	
 	/**
 	 * To set the Current Date and Time For the Object
+	 * @throws IOException 
 	 */
-	public void setDateAndTime(){
-		java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-		this.date = date;
-		java.util.Date now = new java.util.Date();
-	    this.time = new java.sql.Time(now.getTime());
+	public void setDateAndTime() throws IOException{
+		this.date = FoodyProp.getConfiguredDate();
+		this.time = FoodyProp.getConfiguredTime();
 	}
 	
 	/**

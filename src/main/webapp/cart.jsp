@@ -36,14 +36,14 @@
 				<tr>
 					<th>Item Name</th>
 					<th>Quantity</th>
-					<th>Price</th>
+					<th>Unit Price</th>
 				</tr>
 			</thead>
 
 			<tbody>
 				<tr>
-					<td colspan="2">Total Amount :</td>
-					<td id="net"></td>
+					<td colspan="2" bgcolor="#D3D3D3"><strong>Total Amount : </strong></td>
+					<td id="net" bgcolor="#D3D3D3" style="font-weight:bold"></td>
 				</tr>
 			</tbody>
 		</table>
