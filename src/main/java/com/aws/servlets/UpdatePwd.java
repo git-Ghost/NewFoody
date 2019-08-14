@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.aws.dao.UsersDAO;
 import com.aws.domain.FOODY_USERS;
+import com.aws.servlets.interfaces.RedirectFromMyProfile;
 
 @SuppressWarnings("serial")
 @WebServlet("/updatePwd")
@@ -43,31 +44,31 @@ public class UpdatePwd extends HttpServlet {
 					boolean status = userDAO.updateUser(user);
 					if (status) {
 						log.info("Password change has been processed");
-						pw.println(
-								"<html><head></head><body onload='waring()'><script type='text/javascript'>function waring(){ window.alert(\"Password has been changed successfully.\"); }</script></body></html>");
-						resp.sendRedirect("./logout");
+						RedirectFromMyProfile.navigateToLogout("Password has been changed successfully.",pw);
+						
 					} else {
 						log.warn("Password change has been failed. DB Update Can't be Processed");
-						pw.println(
-								"<html><head></head><body onload='waring()'><script type='text/javascript'>function waring(){ window.alert(\" Password Change Can't be Done as it doesn't meet with standards. \"); }</script></body></html>");
+						RedirectFromMyProfile.navigateToMyProfile("Password update failed due to DB error.", pw);
 					}
 				} else {
-					log.warn("Password change has been failed. Mismatch OldPwd with current User Password -->"
+					log.warn("Password change has been failed. Mismatch OldPwd with current User Password"
 							+ user.toString());
-					pw.println(
-							"<html><head></head><body onload='waring()'><script type='text/javascript'>function waring(){ window.alert(\" Password Change Can't be Done as it doesn't meet with standards. \"); }</script></body></html>");
+					RedirectFromMyProfile.navigateToMyProfile("Password Can't be changed as Old Password Doesn't match with our records.", pw);
 				}
 
-			} catch (UsersDAO e) {
+			} catch (Exception e) {
 				log.fatal("User Details Couldn't be found in DB. Perhaps User has been Deleted");
 				log.error(e);
 			} finally {
 				userDAO.tearDown();
 			}
-		} else {
-			log.warn("Password change has been failed");
-			pw.println(
-					"<html><head></head><body onload='waring()'><script type='text/javascript'>function waring(){ window.alert(\" Password Change Can't be Done as it doesn't meet with standards. \"); }</script></body></html>");
+		} else if(oldPwd.equals(newPwd)) {
+			log.warn("Provided Old Password and new password are same");
+			RedirectFromMyProfile.navigateToMyProfile("Password Can't be changed due to old Password and new Password are same.", pw);
+		}else {
+			log.warn("Provided New Password and confirm password are same");
+			RedirectFromMyProfile.navigateToMyProfile("Password Can't be changed due to new password and confirm password don't match", pw);
 		}
+		pw.close();
 	}
 }

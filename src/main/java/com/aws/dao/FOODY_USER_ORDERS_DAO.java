@@ -99,6 +99,7 @@ public class FOODY_USER_ORDERS_DAO extends Exception {
 		Criteria criteria = session.createCriteria(FOODY_USER_ORDERS.class);
 		criteria.add(Restrictions.eq("user", user));
 		criteria.addOrder(Order.desc("date"));
+		criteria.addOrder(Order.desc("time"));
 		ArrayList<FOODY_USER_ORDERS> allOrders = (ArrayList<FOODY_USER_ORDERS>)(ArrayList<?>)criteria.list();
 		return allOrders;
 	}

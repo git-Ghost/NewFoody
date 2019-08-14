@@ -97,6 +97,13 @@
 			<version>2.9.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+
+
 		<!-- Spring Framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
